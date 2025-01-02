@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>黒ひげロスカット占い</title>
+
+  <!-- GA4 トラッキング用スクリプト（測定IDはご自身のものに差し替えてください） -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7KN8SBQTZ8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7KN8SBQTZ8');
+  </script>
+
+  <style>
+    /* ======== 全体設定 ======== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: url('tamatebako_background.png') no-repeat center/cover;
+      color: #333;
+    }
+    /* ======== 題名を太く大きく ======== */
+    h1 {
+      font-size: 2.4em;
+      font-weight: 900;
+      font-family: "Impact", sans-serif;
+      background: #f9a825;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .header-image {
+      width: 100%;
+      max-width: 600px;
+      margin: 10px auto;
+      display: block;
+      border-radius: 10px;
+    }
+    .container {
+      margin: 10px auto 40px auto;
+      text-align: center;
+      max-width: 600px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      padding-bottom: 20px;
+    }
+    .container h2 {
+      margin-top: 0;
+      padding: 10px;
+      font-weight: bold;
+    }
+    /* ======== ゲーム画像 ======== */
+    .image {
+      width: 360px;
+      max-width: 90%;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    /* ======== パネル配置 ======== */
+    .panels {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .panel {
+      width: 80px;
+      height: 80px;
+      margin: 10px;
+      background: #ddd;
+      border-radius: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .panel:hover {
+      background: #ccc;
+    }
+    .panel.selected {
+      background: #ff9800; /* オレンジ */
+      color: #fff;
+      cursor: not-allowed;
+    }
+    /* ======== 結果表示 ======== */
+    .result {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 10px;
+      padding: 15px;
+      background: #ffeb3b;
+      color: #d32f2f;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    /* ======== 各種ボタン・リンク ======== */
+    .cta-link {
+      font-size: 20px;
+      color: #000; 
+      text-decoration: none;
+      margin: 20px 10px;
+      padding: 15px 20px;
+      background: #ffeb3b;
+      border-radius: 10px;
+      display: inline-block;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+    .cta-link:hover {
+      background: #ffc107;
+    }
+    .reset-btn, .continue-btn {
+      display: inline-block;
+      padding: 12px 20px;
+      margin-top: 20px;
+      margin-right: 5px;
+      background: #ff9800;
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .reset-btn:hover, .continue-btn:hover {
+      background: #fb8c00;
+    }
+    /* ======== ランキング表示 ======== */
+    .ranking {
+      margin: 20px auto;
+      max-width: 500px;
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .ranking h2 {
+      color: #ff9800;
+      margin-bottom: 10px;
+    }
+    .ranking ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .ranking li {
+      margin: 5px 0;
+      font-weight: bold;
+      color: #333;
+    }
+    /* ======== ニックネーム入力 ======== */
+    .nickname-container {
+      margin: 20px;
+    }
+    .nickname-input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
+    }
+    .submit-nickname-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background: #ff9800;
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+    .submit-nickname-btn:hover {
+      background: #fb8c00;
+    }
+    /* ======== なんでも相談ボタン ======== */
+    .consult-btn {
+      display: inline-block;
+      font-size: 20px;
+      color: #000;
+      text-decoration: none;
+      margin: 20px 10px;
+      padding: 15px 20px;
+      background: #80deea; /* シアン系 */
+      border-radius: 10px;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+    .consult-btn:hover {
+      background: #4dd0e1;
+    }
+  </style>
+</head>
+<body>
+  <h1>黒ひげロスカット占い</h1>
+
+  <!-- 海賊イメージ：pirate_main_visual.pngを使う想定 -->
+  <img src="pirate_main_visual.png" alt="Pirate Main Visual" class="header-image">
+
+  <div class="container">
+    <h2>さあ、運命の挑戦を始めよう！</h2>
+
+    <!-- ゲーム画像 -->
+    <img id="blackbeardImg" src="blackbeard_in_barrel.png" alt="黒ひげ" class="image">
+
+    <!-- パネル表示領域 -->
+    <div class="panels" id="panels"></div>
+
+    <!-- 結果表示 -->
+    <div id="result" class="result" style="display:none;"></div>
+
+    <!-- オープンチャット誘導リンク（勝利 or ロスカット時）-->
+    <a id="opchatLink" class="cta-link" href="#" target="_blank" style="display: none;"
+       onclick="gtag('event', 'click_opchat');">
+       もっと詳しく学ぶ！OC参加はこちら
+    </a>
+
+    <!-- リセットボタン & 続けるボタン -->
+    <button id="resetBtn" class="reset-btn" style="display: none;">リセット</button>
+    <button id="continueBtn" class="continue-btn" style="display: none;">さらに続ける</button>
+
+    <!-- なんでも相談ボタン（常時表示）-->
+    <a id="consultBtn" class="consult-btn" href="https://onl.bz/9jH3j8q" target="_blank"
+       onclick="gtag('event','click_consult');">
+      なんでも相談
+    </a>
+
+    <!-- ニックネーム登録 -->
+    <div class="nickname-container">
+      <input id="nicknameInput" class="nickname-input" placeholder="ニックネームを入力">
+      <button id="submitNicknameBtn" class="submit-nickname-btn">登録</button>
+    </div>
+
+    <!-- ランキング表示 -->
+    <div class="ranking" id="ranking" style="display: none;">
+      <h2>ランキング</h2>
+      <ul id="rankingList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // ============================
+    // 1) ランキングを白紙に戻す
+    // ============================
+    localStorage.removeItem('pirateRanking');
+
+    // ============================
+    // セッション管理用の変数
+    // ============================
+    let sessionReturns = 0;    // 今のセッションで「3回連続利確」を何回達成したか
+    let isFirstGame    = true; // 最初のゲームはハズレなし
+    let currentNickname = "";  // ニックネーム (未入力→匿名)
+    let playerRanking  = [];   // ランキング(メモリ上)
+
+    // ゲーム関連
+    const MAX_ATTEMPTS = 3;
+    const TOTAL_PANELS = 8;
+    let attempts       = 0;    // いま何回刺したか
+    let isGameOver     = false;
+    let unluckyNumber  = -1;   // ハズレ番号（初期は-1でハズレなしとする）
+
+    // 要素取得
+    const panelsContainer   = document.getElementById('panels');
+    const blackbeardImg     = document.getElementById('blackbeardImg');
+    const resultDiv         = document.getElementById('result');
+    const opchatLink        = document.getElementById('opchatLink');
+    const resetBtn          = document.getElementById('resetBtn');
+    const continueBtn       = document.getElementById('continueBtn');
+    const consultBtn        = document.getElementById('consultBtn');
+    const nicknameInput     = document.getElementById('nicknameInput');
+    const submitNicknameBtn = document.getElementById('submitNicknameBtn');
+    const rankingDiv        = document.getElementById('ranking');
+    const rankingList       = document.getElementById('rankingList');
+
+    // オープンチャット誘導先（勝ち/負けで切り替え）
+    const OPC_LINK_WIN  = "https://onl.bz/88yuzHS?utm_source=PirateGameWin";
+    const OPC_LINK_LOSS = "https://onl.bz/88yuzHS?utm_source=PirateGameLoss";
+
+    // ============================
+    // ゲーム初期化
+    // ============================
+    function initGame() {
+      panelsContainer.innerHTML   = '';
+      blackbeardImg.src           = "blackbeard_in_barrel.png";
+      resultDiv.style.display     = 'none';
+      resultDiv.textContent       = '';
+      opchatLink.style.display    = 'none';
+      resetBtn.style.display      = 'none';
+      continueBtn.style.display   = 'none';
+
+      attempts   = 0;
+      isGameOver = false;
+
+      // 1回目の挑戦はハズレ無し、それ以降はランダム
+      if (isFirstGame) {
+        unluckyNumber = -1; 
+        isFirstGame   = false;
+      } else {
+        unluckyNumber = Math.floor(Math.random() * TOTAL_PANELS);
+      }
+
+      generatePanels();
+    }
+
+    // パネル生成
+    function generatePanels() {
+      for (let i = 0; i < TOTAL_PANELS; i++) {
+        const panel = document.createElement('div');
+        panel.className     = 'panel';
+        panel.textContent   = i + 1;
+        panel.dataset.index = i;
+        panel.addEventListener('click', handlePanelClick);
+        panelsContainer.appendChild(panel);
+      }
+    }
+
+    // パネルクリック時
+    function handlePanelClick(e) {
+      if (isGameOver) return;
+      const panel = e.currentTarget;
+      const index = parseInt(panel.dataset.index);
+
+      if (panel.classList.contains('selected')) return;
+      panel.classList.add('selected');
+
+      attempts++;
+
+      // ハズレだった？
+      if (index === unluckyNumber) {
+        handleUnluckyResult();
+      } else {
+        // 利確
+        if (attempts < MAX_ATTEMPTS) {
+          // 3回に満たない →「利確！」表示
+          resultDiv.textContent    = "利確！";
+          resultDiv.style.display  = 'inline-block';
+          resultDiv.style.background = '#ffeb3b';
+          resultDiv.style.color      = '#d32f2f';
+        } else {
+          // 3回連続利確 → sessionReturns++
+          sessionReturns++;
+          handleVictory();
+        }
+      }
+    }
+
+    // ロスカット(負け)
+    function handleUnluckyResult() {
+      isGameOver = true;
+      blackbeardImg.src = "blackbeard_out.png";
+
+      resultDiv.innerHTML       = "ロスカット！ざんねん！<br>次こそ成功を目指しましょう！";
+      resultDiv.style.display   = 'inline-block';
+      resultDiv.style.background= '#ffeb3b';
+      resultDiv.style.color     = '#d32f2f';
+
+      opchatLink.textContent = "ロスカット回避の秘訣を学ぶ！OC参加";
+      opchatLink.href        = OPC_LINK_LOSS;
+      opchatLink.style.display = "inline-block";
+
+      resetBtn.style.display    = "inline-block";
+      continueBtn.style.display = "none";
+
+      // 負けたらセッション終了 → ランキング登録(セッションReturns)
+      updateRanking();
+      displayRanking();
+
+      // 今回のセッションは終了 → 次回リセットが始まるまでセッションReturnsは維持しない
+      sessionReturns = 0;
+    }
+
+    // 勝ち(3連続利確)
+    function handleVictory() {
+      isGameOver = true;
+      blackbeardImg.src = "blackbeard_in_barrel.png";
+
+      // 改行してわかりやすく
+      resultDiv.innerHTML = `おめでとうございます‼️🎊㊗️<br>${sessionReturns}回目の原資回収です‼️✨`;
+      resultDiv.style.display   = 'inline-block';
+      resultDiv.style.background= '#ffeb3b';
+      resultDiv.style.color     = '#d32f2f';
+
+      opchatLink.textContent = "リアルでも成功を目指す！OC参加";
+      opchatLink.href        = OPC_LINK_WIN;
+      opchatLink.style.display = "inline-block";
+
+      resetBtn.style.display    = "inline-block";
+      continueBtn.style.display = "inline-block";
+    }
+
+    // リセットボタン
+    function resetGame() {
+      // セッションを終了 → ランキング登録
+      updateRanking();
+      displayRanking();
+
+      // 新しいセッションへ(最初に戻る)
+      sessionReturns = 0;
+      isFirstGame    = true;
+      initGame();
+    }
+
+    // さらに続けるボタン（勝利後に次のゲーム）
+    function continueGame() {
+      // 勝利確定 → まだ負けてない → セッション続行
+      // ここではランキング登録しない（セッション中）
+      displayRanking();
+      initGame();
+    }
+
+    // ニックネーム登録
+    submitNicknameBtn.addEventListener('click', () => {
+      const nickname = nicknameInput.value.trim();
+      if (nickname) {
+        currentNickname = nickname;
+        nicknameInput.value = '';
+        alert(`ニックネーム「${currentNickname}」でゲームを開始します！`);
+      } else {
+        currentNickname = "匿名";
+        alert('ニックネーム未入力のため、「匿名」で登録します！');
+      }
+    });
+
+    // ランキング登録
+    function updateRanking() {
+      // セッションが終了したので、sessionReturnsをランキングに反映
+      if (!currentNickname) currentNickname = "匿名";
+      const existing = playerRanking.find(r => r.nickname === currentNickname);
+      if (existing) {
+        existing.returns = Math.max(existing.returns, sessionReturns);
+        // ↑ 上書き or 加算：要件に応じて変更
+        //   もし「上書き」ではなく「加算」にしたいなら:
+        //   existing.returns += sessionReturns;
+      } else {
+        playerRanking.push({ nickname: currentNickname, returns: sessionReturns });
+      }
+      // 原資回収が多い順
+      playerRanking.sort((a, b) => b.returns - a.returns);
+    }
+
+    // ランキング表示
+    function displayRanking() {
+      rankingList.innerHTML = '';
+      playerRanking.forEach((rank, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}位: 原資回収${rank.returns}回 (${rank.nickname})`;
+        rankingList.appendChild(li);
+      });
+      rankingDiv.style.display = (playerRanking.length > 0) ? 'block' : 'none';
+    }
+
+    // ページロード
+    window.addEventListener('DOMContentLoaded', () => {
+      initGame();
+      displayRanking();
+    });
+
+    // ボタンイベント
+    resetBtn.addEventListener('click', resetGame);
+    continueBtn.addEventListener('click', continueGame);
+  </script>
+</body>
+</html>
